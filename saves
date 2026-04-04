@@ -1,0 +1,29 @@
+============================================================
+  ABEAARS - ML Training Pipeline
+============================================================
+
+[1/4] Loading datasets from data/ folder...
+  Loaded 8807 rows from netflix_titles.csv
+  Loaded 9668 rows from amazon_prime_titles.csv
+  Combined total: 18475 rows
+
+[2/4] Cleaning data and building features...
+  Saved 18085 movies to dataset/movies.csv
+
+[3/4] Training TF-IDF Recommendation Model...
+  TF-IDF matrix shape: (18085, 15000)
+  Saved: tfidf_vectorizer.pkl, tfidf_matrix.pkl
+
+[4/4] Training Popularity Prediction Model (Random Forest)...
+  Saved: popularity_model.pkl
+  Features trained on: ['budget_m', 'runtime', 'num_genres']
+
+============================================================
+  Training Complete!
+  Dataset  : 18,085 titles
+  TF-IDF   : 18,085 x 15,000
+  Saved to : backend/models/
+============================================================
+
+Now run:  python start.py
+

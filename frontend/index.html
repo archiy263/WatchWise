@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WatchWise - AI Entertainment Analytics</title>
+    <meta name="description" content="AI-Based Entertainment Analytics & Recommendation System — Deep Learning Sentiment, TF-IDF Recommendations, Popularity Prediction.">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <div class="logo-icon"><i class="fas fa-clapperboard"></i></div>
+                <div>
+                    <div class="logo-text">WatchWise</div>
+                    <div class="logo-sub">Entertainment AI</div>
+                </div>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <div class="nav-section-label">Main</div>
+            <a href="#home" class="sidebar-link active" data-page="home">
+                <i class="fas fa-house"></i><span>Dashboard</span>
+            </a>
+            <a href="#browse" class="sidebar-link" data-page="browse">
+                <i class="fas fa-compass"></i><span>Browse Catalog</span>
+            </a>
+
+            <div class="nav-section-label">AI Tools</div>
+            <a href="#discover" class="sidebar-link" data-page="discover">
+                <i class="fas fa-wand-magic-sparkles"></i><span>AI Recommender</span>
+            </a>
+            <a href="#sentiment" class="sidebar-link" data-page="sentiment">
+                <i class="fas fa-brain"></i><span>Sentiment AI</span>
+            </a>
+            <a href="#predict" class="sidebar-link" data-page="predict">
+                <i class="fas fa-chart-line"></i><span>Popularity AI</span>
+            </a>
+
+            <div class="nav-section-label">System</div>
+            <a href="#about" class="sidebar-link" data-page="about">
+                <i class="fas fa-info-circle"></i><span>About</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="sidebar-footer-badge">
+                <i class="fas fa-robot"></i> BERT + TF-IDF + RF
+            </div>
+        </div>
+    </aside>
+
+    <!-- Mobile Top Bar -->
+    <div class="mobile-topbar" id="mobile-topbar">
+        <button class="mobile-menu-btn" id="mobile-menu-btn">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="mobile-logo">WatchWise</div>
+    </div>
+    <div class="mobile-overlay" id="mobile-overlay"></div>
+
+    <!-- Main Content -->
+    <main class="main-content" id="main-content">
+        <div id="app"></div>
+    </main>
+
+    <script src="data.js"></script>
+    <script src="posters.js"></script>
+    <script src="streaming_data.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

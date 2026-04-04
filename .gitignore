@@ -1,0 +1,23 @@
+# WatchWise — gitignore
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environments
+.env
+venv/
+env/
+
+# Trained models (large binary files - regenerate with train_models.py)
+backend/models/
+
+# Auto-generated dataset
+ml/dataset/
+
+# OS & editor
+.DS_Store
+Thumbs.db
+.vscode/
+*.log

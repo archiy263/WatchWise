@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+pymongo
+motor
+scikit-learn
+pandas
+numpy
+joblib
+pydantic
+transformers
+torch
+tf-keras
+requests
