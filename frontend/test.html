@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Music Functions</title>
+</head>
+<body>
+    <h1>Test Music AI Functions</h1>
+    <button onclick="testFunctions()">Test Functions</button>
+    <div id="output"></div>
+    
+    <script>
+        // Load our music.js content
+        function testFunctions() {
+            var output = document.getElementById('output');
+            output.innerHTML = '<p>Testing...</p>';
+            
+            // Check if our functions exist
+            var functionsToCheck = [
+                'startMoodDetection',
+                'searchSongs', 
+                'exploreByCategory',
+                'getMusicByMood',
+                'getMusicRecommendations'
+            ];
+            
+            var results = [];
+            functionsToCheck.forEach(function(funcName) {
+                if (typeof window[funcName] === 'function') {
+                    results.push('✓ ' + funcName + ' exists');
+                } else {
+                    results.push('✗ ' + funcName + ' MISSING');
+                }
+            });
+            
+            output.innerHTML = '<p>' + results.join('<br>') + '</p>';
+            
+            // Test if MUSIC_DB exists
+            if (typeof MUSIC_DB !== 'undefined') {
+                output.innerHTML += '<p>✓ MUSIC_DB exists with ' + MUSIC_DB.length + ' songs</p>';
+            } else {
+                output.innerHTML += '<p>✗ MUSIC_DB NOT FOUND</p>';
+            }
+            
+            // Show all window functions that contain certain keywords
+            var allFuncs = Object.keys(window).filter(function(k) { 
+                return typeof window[k] === 'function' && 
+                       (k.indexOf('Song') >= 0 || k.indexOf('Mood') >= 0 || 
+                        k.indexOf('Explore') >= 0 || k.indexOf('Search') >= 0);
+            });
+            output.innerHTML += '<p><strong>Available functions:</strong><br>' + 
+                allFuncs.slice(0, 10).join('<br>') + '</p>';
+        }
+    </script>
+</body>
+</html>

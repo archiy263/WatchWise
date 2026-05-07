@@ -11,3 +11,12 @@ transformers
 torch
 tf-keras
 requests
+spotipy
+aiohttp
+aiosqlite
+sqlalchemy[asyncio]
+bcrypt
+PyJWT
+slowapi
+python-dotenv
+pydantic[email]

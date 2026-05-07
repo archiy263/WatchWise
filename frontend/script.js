@@ -6,6 +6,7 @@ const API_BASE = "http://127.0.0.1:8000";
 
 const ROUTES = {
     home: renderHome, browse: renderBrowse, discover: renderDiscover,
+    'music-discover': renderMusicDiscover,
     sentiment: renderSentiment, predict: renderPredict, about: renderAbout
 };
 
@@ -188,15 +189,15 @@ function renderHome(container) {
                 Your Next Obsession,
                 <span class="line2"><span class="glow-text" data-text="Decoded by AI.">Decoded by AI.</span></span>
             </h1>
-            <p>Experience entertainment intelligence — <strong>${total.toLocaleString()} titles</strong> analyzed through deep learning, with real-time sentiment scoring, predictive analytics, and hyper-personalized discovery.</p>
+            <p>Experience entertainment intelligence — <strong>${total.toLocaleString()} movies/shows</strong> and <strong>millions of API-powered music tracks</strong> analyzed through deep learning, with real-time sentiment scoring, predictive analytics, and hyper-personalized discovery.</p>
             <div class="hero-actions">
                 <a href="#browse" data-page="browse" class="btn-primary"><i class="fas fa-rocket"></i> Explore Universe</a>
-                <a href="#discover" data-page="discover" class="btn-secondary"><i class="fas fa-wand-magic-sparkles"></i> AI Discovery</a>
+                <a href="#music-discover" data-page="music-discover" class="btn-secondary"><i class="fas fa-music"></i> Music AI</a>
             </div>
             <div class="hero-live-stats">
                 <div class="hero-live-stat"><div class="num">${moviesCount.toLocaleString()}</div><div class="lbl">Movies</div></div>
                 <div class="hero-live-stat"><div class="num">${seriesCount.toLocaleString()}</div><div class="lbl">Web Series</div></div>
-                <div class="hero-live-stat"><div class="num">${showCount}</div><div class="lbl">TV Shows</div></div>
+                <div class="hero-live-stat"><div class="num">Million+</div><div class="lbl">API Tracks</div></div>
                 <div class="hero-live-stat"><div class="num">${langs}</div><div class="lbl">Languages</div></div>
             </div>
         </div>
@@ -257,7 +258,7 @@ function renderHome(container) {
 
     <div class="stats-grid">
         <div class="stat-card"><span class="stat-icon"><i class="fas fa-layer-group"></i></span><div class="stat-label">Total Titles</div><div class="stat-val gradient-text">${total.toLocaleString()}</div></div>
-        <div class="stat-card"><span class="stat-icon"><i class="fas fa-film"></i></span><div class="stat-label">Movies</div><div class="stat-val">${moviesCount.toLocaleString()}</div></div>
+        <div class="stat-card"><span class="stat-icon"><i class="fas fa-music"></i></span><div class="stat-label">API Music Tracks</div><div class="stat-val">Million+</div></div>
         <div class="stat-card"><span class="stat-icon"><i class="fas fa-tv"></i></span><div class="stat-label">Web Series</div><div class="stat-val">${seriesCount.toLocaleString()}</div></div>
         <div class="stat-card"><span class="stat-icon"><i class="fas fa-satellite-dish"></i></span><div class="stat-label">TV Shows</div><div class="stat-val">${showCount}</div></div>
         <div class="stat-card"><span class="stat-icon"><i class="fas fa-globe"></i></span><div class="stat-label">Languages</div><div class="stat-val">${langs}</div></div>
@@ -392,6 +393,110 @@ function renderDiscover(container) {
 }
 
 // ============================================================
+//   MUSIC DISCOVER - Apple Music Style
+// ============================================================
+function renderMusicDiscover(container) {
+    container.innerHTML = `
+    <div class="music-ai-page">
+        <!-- Header -->
+        <div class="music-ai-header">
+            <div class="music-ai-logo">
+                <i class="fas fa-music"></i>
+                <span>Music AI</span>
+            </div>
+            <p class="music-ai-tagline">Your personal music experience</p>
+        </div>
+
+        <!-- Mood Detector Section -->
+        <div class="music-section">
+            <div class="section-header">
+                <h2><i class="fas fa-heart"></i> How are you feeling?</h2>
+                <p>Answer a few questions and we'll find the perfect songs</p>
+            </div>
+            <button class="btn-start-mood" onclick="startMoodDetection()">
+                <i class="fas fa-play"></i> Start Mood Check
+            </button>
+            <div id="mood-results" class="music-results"></div>
+        </div>
+
+        <!-- Search Section -->
+        <div class="music-section">
+            <div class="section-header">
+                <h2><i class="fas fa-search"></i> Search Songs</h2>
+                <p>Find any song by title or artist</p>
+            </div>
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="music-search" placeholder="Search for songs..." 
+                       onkeydown="if(event.key==='Enter')searchSongs(this.value)">
+                <button onclick="searchSongs(document.getElementById('music-search').value)">
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+            <div class="quick-search-tags">
+                <span>Popular:</span>
+                ${['Happy', 'Blinding Lights', 'Tum Hi Ho', 'Levitating'].map(t =>
+                    `<button onclick="searchSongs('${t}')">${t}</button>`
+                ).join('')}
+            </div>
+            <div id="music-results" class="music-results"></div>
+        </div>
+
+        <!-- Explore Section - NO MOVIES -->
+        <div class="music-section">
+            <div class="section-header">
+                <h2><i class="fas fa-compass"></i> Explore</h2>
+                <p>Browse by category</p>
+            </div>
+            <div class="category-grid">
+                <div class="category-card" onclick="exploreCategory('new')">
+                    <div class="cat-icon">🆕</div>
+                    <div class="cat-info">
+                        <h4>New Releases</h4>
+                        <p>Latest songs</p>
+                    </div>
+                </div>
+                <div class="category-card" onclick="exploreCategory('popular')">
+                    <div class="cat-icon">🔥</div>
+                    <div class="cat-info">
+                        <h4>Popular</h4>
+                        <p>Most played</p>
+                    </div>
+                </div>
+                <div class="category-card" onclick="exploreCategory('workout')">
+                    <div class="cat-icon">💪</div>
+                    <div class="cat-info">
+                        <h4>Workout</h4>
+                        <p>Get energized</p>
+                    </div>
+                </div>
+                <div class="category-card" onclick="exploreCategory('chill')">
+                    <div class="cat-icon">😌</div>
+                    <div class="cat-info">
+                        <h4>Chill</h4>
+                        <p>Relax & unwind</p>
+                    </div>
+                </div>
+                <div class="category-card" onclick="exploreCategory('indian')">
+                    <div class="cat-icon">🇮🇳</div>
+                    <div class="cat-info">
+                        <h4>Indian</h4>
+                        <p>Bollywood & more</p>
+                    </div>
+                </div>
+                <div class="category-card" onclick="exploreCategory('english')">
+                    <div class="cat-icon">🌎</div>
+                    <div class="cat-info">
+                        <h4>English</h4>
+                        <p>International</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>`;
+}
+
+// ============================================================
 //   SENTIMENT AI
 // ============================================================
 function renderSentiment(container) {
@@ -474,13 +579,14 @@ function renderAbout(container) {
         <h1>About <span class="gradient-text">WatchWise</span></h1>
         <p class="page-desc">AI-Based Entertainment Analytics & Recommendation System \u2014 Problem Domain 4</p>
         <div class="stats-grid" style="margin-bottom:2rem;">
-            <div class="stat-card"><div class="stat-label">Total Titles</div><div class="stat-val gradient-text">${total.toLocaleString()}</div></div>
-            <div class="stat-card"><div class="stat-label">Movies</div><div class="stat-val">${moviesCount.toLocaleString()}</div></div>
+            <div class="stat-card"><div class="stat-label">Movies & Shows</div><div class="stat-val gradient-text">${total.toLocaleString()}</div></div>
+            <div class="stat-card"><div class="stat-label">API Music Tracks</div><div class="stat-val gradient-text">Real Time Fetching</div></div>
             <div class="stat-card"><div class="stat-label">Web Series</div><div class="stat-val">${seriesCount.toLocaleString()}</div></div>
-            <div class="stat-card"><div class="stat-label">AI Models</div><div class="stat-val">3</div></div>
+            <div class="stat-card"><div class="stat-label">AI Models</div><div class="stat-val">4</div></div>
         </div>
         <div class="about-grid">
             <div class="about-card"><div class="about-card-icon">\u{1F3AC}</div><h3>Movie Recommendations</h3><p>TF-IDF + Cosine Similarity content-based filtering. Finds the most similar titles using genre, plot, and language vectors.</p><ul class="tech-list"><li class="tech-badge">TF-IDF</li><li class="tech-badge">Cosine Similarity</li><li class="tech-badge">Scikit-Learn</li></ul></div>
+            <div class="about-card"><div class="about-card-icon">\u{1F3B5}</div><h3>Music AI & Playback</h3><p>Multi-layer smart playback logic. Maps emotions to genres and handles video failover seamlessly if streams break.</p><ul class="tech-list"><li class="tech-badge">WebSockets</li><li class="tech-badge">Failover</li><li class="tech-badge">Audio API</li></ul></div>
             <div class="about-card"><div class="about-card-icon">\u{1F9E0}</div><h3>Sentiment Analysis</h3><p>HuggingFace BERT Transformer model. Truly multilingual \u2014 understands context in Hindi, Tamil, English, Korean, and more.</p><ul class="tech-list"><li class="tech-badge">BERT</li><li class="tech-badge">HuggingFace</li><li class="tech-badge">PyTorch</li></ul></div>
             <div class="about-card"><div class="about-card-icon">\u{1F4CA}</div><h3>Popularity Prediction</h3><p>RandomForest Regression trained on production features \u2014 budget, runtime, genre count \u2014 to predict popularity scores.</p><ul class="tech-list"><li class="tech-badge">RandomForest</li><li class="tech-badge">Scikit-Learn</li><li class="tech-badge">Pandas</li></ul></div>
             <div class="about-card"><div class="about-card-icon">\u{1F4FA}</div><h3>OTT Platform Data</h3><p>Streaming availability for Netflix, Prime Video, Disney+ Hotstar, JioCinema, HBO Max, ZEE5, SonyLIV, Apple TV+, and more.</p><ul class="tech-list"><li class="tech-badge">Netflix</li><li class="tech-badge">Prime Video</li><li class="tech-badge">HBO Max</li></ul></div>
@@ -692,6 +798,124 @@ async function getRecommendations() {
             resultsDiv.innerHTML = errBox("No results found (offline mode).");
         }
     }
+}
+
+// ============================================================
+//   MUSIC RECOMMENDATION FUNCTIONS
+// ============================================================
+async function getMusicByMood(mood) {
+    const resultsDiv = document.getElementById("mood-results");
+    if (!resultsDiv) return;
+
+    const moodEmojis = { happy: '☀️', sad: '🌧️', energetic: '⚡', chill: '🌙', romantic: '💕', party: '🎉' };
+    resultsDiv.innerHTML = loadingHTML(`Finding ${mood} songs...`);
+
+    try {
+        const res = await fetch(`${API_BASE}/recommend/music-by-mood?mood=${encodeURIComponent(mood)}`);
+        const data = await res.json();
+
+        if (data.error || !data.recommendations?.length) {
+            // Fallback to local MUSIC_DB
+            const localResults = (typeof MUSIC_DB !== 'undefined' ? MUSIC_DB.filter(s => s.mood === mood) : []).slice(0, 10);
+            if (localResults.length) {
+                renderMoodResults(resultsDiv, localResults, mood, moodEmojis[mood] || '🎵', true);
+                return;
+            }
+            resultsDiv.innerHTML = errBox(`No songs found for mood "${mood}".`);
+            return;
+        }
+
+        renderMoodResults(resultsDiv, data.recommendations, mood, moodEmojis[mood] || '🎵');
+    } catch (err) {
+        console.warn("Backend offline, using local DB");
+        const localResults = (typeof MUSIC_DB !== 'undefined' ? MUSIC_DB.filter(s => s.mood === mood) : []).slice(0, 10);
+        if (localResults.length) {
+            renderMoodResults(resultsDiv, localResults, mood, moodEmojis[mood] || '🎵', true);
+        } else {
+            resultsDiv.innerHTML = errBox("Unable to fetch music (offline mode).");
+        }
+    }
+}
+
+function renderMoodResults(container, songs, mood, emoji, isLocal = false) {
+    const sourceBadge = isLocal ? '<span class="info-pill">📁 Local database</span>' : '';
+    container.innerHTML = sourceBadge + songs.map((song, i) => `
+        <div class="music-card" style="animation-delay:${i*0.05}s">
+            <div class="music-card-left">
+                <span class="music-num">${i+1}</span>
+                <span class="mood-badge" style="background:var(--accent);color:white;padding:0.15rem 0.5rem;border-radius:12px;font-size:0.7rem;">${emoji} ${mood}</span>
+            </div>
+            <div class="music-card-center">
+                <div class="music-title">${song.title}</div>
+                <div class="music-artist">${song.artist || 'Unknown Artist'}</div>
+                <div class="music-meta">${song.genre || ''}${song.genre && song.mood ? ' · ' : ''}${song.mood || ''}</div>
+            </div>
+        </div>
+    `).join('');
+}
+
+async function getMusicRecommendations() {
+    const query = (document.getElementById("music-search")?.value || "").trim();
+    const resultsDiv = document.getElementById("music-results");
+    if (!resultsDiv) return;
+    if (!query) { resultsDiv.innerHTML = errBox("Please enter a song title or artist name."); return; }
+
+    resultsDiv.innerHTML = loadingHTML("Finding similar songs...");
+
+    try {
+        const res = await fetch(`${API_BASE}/recommend/music?song_title=${encodeURIComponent(query)}`);
+        const data = await res.json();
+
+        if (data.error || !data.recommendations?.length) {
+            // Fallback to local MUSIC_DB
+            const localResults = (typeof MUSIC_DB !== 'undefined' ? MUSIC_DB.filter(s =>
+                s.title.toLowerCase().includes(query.toLowerCase()) ||
+                (s.artist && s.artist.toLowerCase().includes(query.toLowerCase()))
+            ) : []).slice(0, 8);
+
+            if (localResults.length) {
+                renderMusicResults(resultsDiv, localResults, query, true);
+                return;
+            }
+            resultsDiv.innerHTML = errBox(`No songs found for "${query}".`);
+            return;
+        }
+
+        renderMusicResults(resultsDiv, data.recommendations, data.matched || query, false, data.matched_artist);
+    } catch (err) {
+        console.warn("Backend offline, using local DB");
+        const localResults = (typeof MUSIC_DB !== 'undefined' ? MUSIC_DB.filter(s =>
+            s.title.toLowerCase().includes(query.toLowerCase()) ||
+            (s.artist && s.artist.toLowerCase().includes(query.toLowerCase()))
+        ) : []).slice(0, 8);
+
+        if (localResults.length) {
+            renderMusicResults(resultsDiv, localResults, query, true);
+        } else {
+            resultsDiv.innerHTML = errBox("No results found (offline mode).");
+        }
+    }
+}
+
+function renderMusicResults(container, songs, matched, isLocal = false, artist = '') {
+    const sourceBadge = isLocal ? '<div class="info-pill">📁 Local database</div>' :
+        `<div class="info-pill">✓ Matched: <strong>${matched}</strong>${artist ? ` by ${artist}` : ''}</div>`;
+
+    container.innerHTML = sourceBadge + songs.map((song, i) => `
+        <div class="music-card" style="animation-delay:${i*0.05}s">
+            <div class="music-card-left">
+                <span class="music-num">${i+1}</span>
+                <span class="mood-badge" style="background:rgba(231,122,76,0.15);color:var(--accent);padding:0.15rem 0.5rem;border-radius:12px;font-size:0.7rem;">
+                    🎵 ${song.mood || 'Unknown'}
+                </span>
+            </div>
+            <div class="music-card-center">
+                <div class="music-title">${song.title}</div>
+                <div class="music-artist">${song.artist || 'Unknown Artist'}</div>
+                <div class="music-meta">${song.genre || ''}${song.genre && song.mood ? ' · ' : ''}${song.mood || ''}</div>
+            </div>
+        </div>
+    `).join('');
 }
 
 function recCardHTML(m, i) {

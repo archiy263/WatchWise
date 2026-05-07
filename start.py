@@ -10,17 +10,35 @@ import subprocess, sys, os, time, webbrowser, signal, threading
 PYTHON = sys.executable
 ROOT   = os.path.dirname(os.path.abspath(__file__))
 
-# ---- Check if models are trained ----
-models_dir = os.path.join(ROOT, "backend", "models", "tfidf_matrix.pkl")
-if not os.path.exists(models_dir):
+# ---- Check if models are trained & dependencies are installed ----
+movie_model = os.path.join(ROOT, "backend", "models", "tfidf_matrix.pkl")
+music_model = os.path.join(ROOT, "backend", "models", "music_tfidf_matrix.pkl")
+
+missing_deps = False
+try:
+    import uvicorn
+    import fastapi
+except ImportError:
+    missing_deps = True
+
+if missing_deps or not os.path.exists(movie_model):
     print("=" * 60)
-    print("ABEAARS First-Time Setup")
+    print("ABEAARS Setup - Installing Dependencies")
     print("=" * 60)
-    print("[1/2] Installing dependencies...")
+    print("[1/2] Installing requirements...")
     subprocess.run([PYTHON, "-m", "pip", "install", "-r", os.path.join(ROOT, "requirements.txt")], check=True)
-    print("\n[2/2] Training ML models and building dataset...")
-    subprocess.run([PYTHON, "train_models.py"], cwd=os.path.join(ROOT, "ml"), check=True)
-    print("\n[OK] Setup complete!\n")
+    if not os.path.exists(movie_model):
+        print("\n[2/2] Training movie ML models...")
+        subprocess.run([PYTHON, "train_models.py"], cwd=os.path.join(ROOT, "ml"), check=True)
+        print("\n[OK] Movie models trained!\n")
+
+if not os.path.exists(music_model):
+    print("=" * 60)
+    print("Music Recommendation - First-Time Setup")
+    print("=" * 60)
+    print("Training music models for mood-based recommendations...")
+    subprocess.run([PYTHON, "train_music_models.py"], cwd=os.path.join(ROOT, "ml"), check=True)
+    print("\n[OK] Music models trained!\n")
 
 print("=" * 60)
 print("  ABEAARS - Pro Entertainment Analytics")
@@ -36,9 +54,9 @@ backend_proc = subprocess.Popen(
     cwd=ROOT
 )
 
-# Launch frontend
+# Launch frontend (bind to 127.0.0.1 explicitly)
 frontend_proc = subprocess.Popen(
-    [PYTHON, "-m", "http.server", "8081", "-d", "frontend"],
+    [PYTHON, "-m", "http.server", "8081", "--bind", "127.0.0.1", "-d", "frontend"],
     cwd=ROOT
 )
 

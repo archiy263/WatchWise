@@ -99,7 +99,7 @@ out_csv = os.path.join(DATASET_DIR, "movies.csv")
 movies_df.to_csv(out_csv, index=False)
 print(f"  Saved {len(movies_df)} movies to dataset/movies.csv")
 
-# -- 3. TF-IDF Recommendation Model -------------------------------------
+# 3. TF-IDF Recommendation Model
 print("\n[3/4] Training TF-IDF Recommendation Model...")
 tfidf = TfidfVectorizer(
     stop_words='english',

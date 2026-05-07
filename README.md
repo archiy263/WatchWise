@@ -3,8 +3,6 @@
 AI-powered movie & web series recommendation system using FastAPI + HuggingFace Transformers.
 
 ---
-Note: Large model files are stored using Git LFS.
-Run `git lfs install` before cloning.
 
 ## Project Structure
 

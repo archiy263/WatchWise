@@ -5,6 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WatchWise - AI Entertainment Analytics</title>
     <meta name="description" content="AI-Based Entertainment Analytics & Recommendation System — Deep Learning Sentiment, TF-IDF Recommendations, Popularity Prediction.">
+    <meta name="keywords" content="movies, recommendations, AI, sentiment analysis, entertainment, music, WatchWise">
+    <meta name="author" content="WatchWise">
+    <!-- Open Graph Tags -->
+    <meta property="og:title" content="WatchWise - AI Entertainment Analytics">
+    <meta property="og:description" content="Discover movies and music with our AI-powered recommendation engine.">
+    <meta property="og:image" content="https://watchwise.yourdomain.com/og-image.jpg">
+    <meta property="og:url" content="https://watchwise.yourdomain.com/">
+    <meta property="og:type" content="website">
+    <!-- Twitter Card Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="WatchWise - AI Entertainment Analytics">
+    <meta name="twitter:description" content="Discover movies and music with our AI-powered recommendation engine.">
+    <meta name="twitter:image" content="https://watchwise.yourdomain.com/og-image.jpg">
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
@@ -36,6 +49,9 @@
             <a href="#discover" class="sidebar-link" data-page="discover">
                 <i class="fas fa-wand-magic-sparkles"></i><span>AI Recommender</span>
             </a>
+            <a href="#music-discover" class="sidebar-link" data-page="music-discover">
+                <i class="fas fa-music"></i><span>Music AI</span>
+            </a>
             <a href="#sentiment" class="sidebar-link" data-page="sentiment">
                 <i class="fas fa-brain"></i><span>Sentiment AI</span>
             </a>
@@ -51,7 +67,7 @@
 
         <div class="sidebar-footer">
             <div class="sidebar-footer-badge">
-                <i class="fas fa-robot"></i> BERT + TF-IDF + RF
+                <i class="fas fa-robot"></i> BERT + TF-IDF + RF + Music AI
             </div>
         </div>
     </aside>
@@ -68,11 +84,85 @@
     <!-- Main Content -->
     <main class="main-content" id="main-content">
         <div id="app"></div>
+
     </main>
 
-    <script src="data.js"></script>
-    <script src="posters.js"></script>
-    <script src="streaming_data.js"></script>
-    <script src="script.js"></script>
+    <script src="data.js?v=2"></script>
+    <script src="music_data.js?v=2"></script>
+    <script src="posters.js?v=2"></script>
+    <script src="streaming_data.js?v=2"></script>
+    <script src="script.js?v=2"></script>
+    <script src="music.js?v=2"></script>
+
+    <!-- Wire up language chips -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Language chip toggle
+            document.querySelectorAll('.lang-chip').forEach(chip => {
+                chip.addEventListener('click', () => {
+                    document.querySelectorAll('.lang-chip').forEach(c => c.classList.remove('active'));
+                    chip.classList.add('active');
+                });
+            });
+        });
+    </script>
+
+    <!-- ═══ Persistent Global Music Player ═══ -->
+    <div id="global-player" class="global-player glass-card" style="transform: translateY(150%);">
+        <div class="player-controls">
+            <button class="player-close" onclick="closePlayer()"><i class="fas fa-times"></i></button>
+        </div>
+        <iframe id="spotify-iframe" 
+            src="" 
+            width="100%" height="90" 
+            frameBorder="0" allowfullscreen="" 
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+            loading="lazy">
+        </iframe>
+    </div>
+
+    <!-- ═══ Cookie Banner ═══ -->
+    <div id="cookie-banner" class="cookie-banner" style="display:none;">
+        <p>We use cookies to improve your experience and analyze site traffic. By continuing to use this site, you consent to our use of cookies. <a href="privacy.html">Privacy Policy</a></p>
+        <button id="accept-cookies" class="btn-primary" style="padding: 0.4rem 1rem;">Accept</button>
+    </div>
+    <style>
+        .cookie-banner {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            padding: 1rem 1.5rem;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            z-index: 9999;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            animation: fadeUp 0.5s ease both;
+        }
+        .cookie-banner p { margin: 0; font-size: 0.85rem; color: var(--text-dim); }
+        .cookie-banner a { color: var(--accent); text-decoration: none; }
+        @media (max-width: 600px) {
+            .cookie-banner { flex-direction: column; align-items: stretch; text-align: center; }
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!localStorage.getItem('cookies_accepted')) {
+                document.getElementById('cookie-banner').style.display = 'flex';
+            }
+            document.getElementById('accept-cookies').addEventListener('click', () => {
+                localStorage.setItem('cookies_accepted', 'true');
+                document.getElementById('cookie-banner').style.display = 'none';
+            });
+        });
+    </script>
 </body>
 </html>
